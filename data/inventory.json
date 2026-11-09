@@ -1,0 +1,56 @@
+[
+  {
+    "inventory_number": "INV-001",
+    "type": "ПК",
+    "name": "Системный блок Dell OptiPlex 7090",
+    "cabinet": "301",
+    "status": "исправно",
+    "date_received": "2024-09-12",
+    "responsible": "Иванов А.С."
+  },
+  {
+    "inventory_number": "INV-002",
+    "type": "Монитор",
+    "name": "Монитор Samsung 24\" S24R350",
+    "cabinet": "301",
+    "status": "исправно",
+    "date_received": "2024-09-12",
+    "responsible": "Иванов А.С."
+  },
+  {
+    "inventory_number": "INV-003",
+    "type": "Принтер",
+    "name": "Принтер HP LaserJet Pro M404dn",
+    "cabinet": "205",
+    "status": "требует ремонта",
+    "date_received": "2023-11-03",
+    "responsible": "Петрова Е.В."
+  },
+  {
+    "inventory_number": "INV-004",
+    "type": "ПК",
+    "name": "Системный блок Lenovo ThinkCentre M70q",
+    "cabinet": "412",
+    "status": "исправно",
+    "date_received": "2025-02-18",
+    "responsible": "Сидоров М.К."
+  },
+  {
+    "inventory_number": "INV-005",
+    "type": "Проектор",
+    "name": "Проектор Epson EB-X06",
+    "cabinet": "101",
+    "status": "списано",
+    "date_received": "2021-05-20",
+    "responsible": "Козлова Н.А."
+  },
+  {
+    "inventory_number": "INV-006",
+    "type": "Монитор",
+    "name": "Монитор LG 27UL500",
+    "cabinet": "412",
+    "status": "исправно",
+    "date_received": "2025-03-01",
+    "responsible": "Сидоров М.К."
+  }
+]
