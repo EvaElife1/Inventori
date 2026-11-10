@@ -52,5 +52,14 @@
     "status": "исправно",
     "date_received": "2025-03-01",
     "responsible": "Сидоров М.К."
+  },
+  {
+    "inventory_number": "34",
+    "type": "Проектор",
+    "name": "в",
+    "cabinet": "23",
+    "status": "требует ремонта",
+    "date_received": "10.11.2016",
+    "responsible": "я"
   }
 ]
