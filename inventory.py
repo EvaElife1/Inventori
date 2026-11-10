@@ -64,19 +64,14 @@ def validate_item(data: Dict) -> List[str]:
 
 
 def add_item(item: Dict) -> tuple[bool, str]:
-    """
-    Добавляет новую запись.
-    Возвращает (успех, сообщение).
-    """
+    """Добавляет новую запись. Возвращает (успех, сообщение)."""
     errors = validate_item(item)
     if errors:
         return False, "Ошибки: " + "; ".join(errors)
 
-    # Если номер не указан — генерируем
     if not item.get("inventory_number"):
         item["inventory_number"] = generate_inventory_number()
 
-    # Проверка уникальности
     if find_by_number(item["inventory_number"]):
         return False, f"Ошибка: номер {item['inventory_number']} уже существует"
 
@@ -86,7 +81,42 @@ def add_item(item: Dict) -> tuple[bool, str]:
     return True, f"Оборудование {item['inventory_number']} успешно добавлено"
 
 
+def search_by_number(number: str) -> Optional[Dict]:
+    """Поиск по инвентарному номеру."""
+    return find_by_number(number.strip())
+
+
+def search_by_cabinet(cabinet: str) -> List[Dict]:
+    """Поиск всех записей по кабинету."""
+    items = load_inventory()
+    return [item for item in items if item.get("cabinet") == cabinet.strip()]
+
+
+def update_item(inventory_number: str, updates: Dict) -> tuple[bool, str]:
+    """Изменение записи."""
+    items = load_inventory()
+    for i, item in enumerate(items):
+        if item.get("inventory_number") == inventory_number:
+            items[i].update(updates)
+            save_inventory(items)
+            return True, f"Запись {inventory_number} успешно обновлена"
+    return False, f"Запись с номером {inventory_number} не найдена"
+
+
+def delete_item(inventory_number: str) -> tuple[bool, str]:
+    """Удаление записи."""
+    items = load_inventory()
+    new_items = [item for item in items if item.get("inventory_number") != inventory_number]
+
+    if len(new_items) == len(items):
+        return False, f"Запись с номером {inventory_number} не найдена"
+
+    save_inventory(new_items)
+    return True, f"Запись {inventory_number} успешно удалена"
+
+
 def print_item(item: Dict) -> None:
+    """Красиво выводит одну запись."""
     print("-" * 50)
     print(f"  Инв. номер   : {item.get('inventory_number', '—')}")
     print(f"  Тип          : {item.get('type', '—')}")
@@ -98,10 +128,12 @@ def print_item(item: Dict) -> None:
 
 
 def show_all_equipment() -> None:
+    """Выводит весь список оборудования."""
     items = get_all_items()
     if not items:
         print("\nСписок оборудования пуст.\n")
         return
+
     print(f"\n=== Список оборудования (всего: {len(items)}) ===\n")
     for item in items:
         print_item(item)
