@@ -45,3 +45,4 @@ inventory_system/
 
 1. Клонировать репозиторий:
 ```bash
+https://github.com/EvaElife1/Inventori.git
