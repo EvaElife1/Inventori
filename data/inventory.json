@@ -61,5 +61,14 @@
     "status": "требует ремонта",
     "date_received": "10.11.2016",
     "responsible": "я"
+  },
+  {
+    "inventory_number": "12",
+    "type": "пк",
+    "name": "МОЙ",
+    "cabinet": "3",
+    "status": "требует ремонта",
+    "date_received": "11.12.2026",
+    "responsible": "галкин"
   }
 ]
