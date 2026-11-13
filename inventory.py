@@ -127,3 +127,50 @@ def show_all_equipment() -> None:
         print_item(item)
     print("-" * 55)
     print()
+
+
+def get_statistics() -> Dict:
+    """Возвращает статистику по состояниям и кабинетам."""
+    items = load_inventory()
+
+    status_count = {}
+    cabinet_count = {}
+
+    for item in items:
+        status = item.get("status", "не указано")
+        cabinet = item.get("cabinet", "не указан")
+
+        status_count[status] = status_count.get(status, 0) + 1
+        cabinet_count[cabinet] = cabinet_count.get(cabinet, 0) + 1
+
+    return {
+        "total": len(items),
+        "by_status": status_count,
+        "by_cabinet": cabinet_count
+    }
+
+
+def show_statistics() -> None:
+    """Выводит статистику в удобном виде."""
+    stats = get_statistics()
+
+    print("\n" + "=" * 45)
+    print("           СТАТИСТИКА ОБОРУДОВАНИЯ")
+    print("=" * 45)
+    print(f"Всего единиц оборудования: {stats['total']}")
+
+    print("\nПо состоянию:")
+    if stats["by_status"]:
+        for status, count in stats["by_status"].items():
+            print(f"  • {status}: {count}")
+    else:
+        print("  Нет данных")
+
+    print("\nПо кабинетам:")
+    if stats["by_cabinet"]:
+        for cabinet, count in sorted(stats["by_cabinet"].items()):
+            print(f"  • Кабинет {cabinet}: {count}")
+    else:
+        print("  Нет данных")
+
+    print("=" * 45 + "\n")

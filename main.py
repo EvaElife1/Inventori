@@ -7,7 +7,8 @@ from inventory import (
     filter_by_status,
     update_item,
     delete_item,
-    print_item
+    print_item,
+    show_statistics
 )
 
 
@@ -22,7 +23,8 @@ def show_menu() -> None:
     print("5. Фильтр по состоянию")
     print("6. Изменить запись")
     print("7. Удалить запись")
-    print("8. Выход")
+    print("8. Статистика")
+    print("9. Выход")
     print("=" * 45)
 
 
@@ -113,8 +115,7 @@ def main() -> None:
             updates = {}
             if new_status:
                 updates["status"] = new_status
-            if new_cabinet:
-                updates["cabinet"] = new_cabinet
+            if new_cabinet:updates["cabinet"] = new_cabinet
             if new_responsible:
                 updates["responsible"] = new_responsible
 
@@ -142,11 +143,14 @@ def main() -> None:
                 print("\nУдаление отменено.\n")
 
         elif choice == "8":
+            show_statistics()
+
+        elif choice == "9":
             print("\nРабота программы завершена. До свидания!")
             break
 
         else:
-            print("\nНеверный выбор. Введите число от 1 до 8.\n")
+            print("\nНеверный выбор. Введите число от 1 до 9.\n")
 
 
 if __name__ == "__main__":
