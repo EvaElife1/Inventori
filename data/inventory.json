@@ -61,5 +61,14 @@
     "status": "требует ремонта",
     "date_received": "11.12.2026",
     "responsible": "галкин"
+  },
+  {
+    "inventory_number": "55",
+    "type": "ж",
+    "name": "гуль",
+    "cabinet": "рэп",
+    "status": "списано",
+    "date_received": "222222222222222222222222222",
+    "responsible": "от38753487458"
   }
 ]

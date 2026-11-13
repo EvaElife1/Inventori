@@ -1,5 +1,13 @@
 from typing import List, Dict, Optional, Tuple
 from storage import load_data, save_data
+import re
+
+
+ALLOWED_STATUSES = {"исправно", "требует ремонта", "списано"}
+ALLOWED_TYPES = {
+    "пк", "компьютер", "монитор", "принтер", "мфу", "проектор",
+    "клавиатура", "мышь", "ноутбук", "роутер", "коммутатор", "сервер"
+}
 
 
 def load_inventory() -> List[Dict]:
@@ -37,15 +45,47 @@ def generate_inventory_number() -> str:
 
 
 def validate_item(data: Dict) -> List[str]:
+    """Строгая проверка данных."""
     errors = []
-    if not str(data.get("type", "")).strip():
+
+    # Тип
+    type_value = str(data.get("type", "")).strip()
+    if not type_value:
         errors.append("Тип оборудования не может быть пустым")
-    if not str(data.get("name", "")).strip():
+    elif type_value.lower() not in ALLOWED_TYPES and len(type_value) < 2:
+        errors.append("Укажите нормальный тип (ПК, Монитор, Принтер, Проектор и т.д.)")
+
+    # Наименование
+    name = str(data.get("name", "")).strip()
+    if not name:
         errors.append("Наименование не может быть пустым")
-    if not str(data.get("cabinet", "")).strip():
+    elif len(name) < 3:
+        errors.append("Наименование слишком короткое (минимум 3 символа)")
+
+    # Кабинет
+    cabinet = str(data.get("cabinet", "")).strip()
+    if not cabinet:
         errors.append("Кабинет не может быть пустым")
-    if not str(data.get("status", "")).strip():
+    elif not re.match(r'^[\w\-а-яА-ЯёЁ]{1,10}$', cabinet):
+        errors.append("Кабинет должен быть номером или коротким названием (например 301)")
+
+    # Состояние
+    status = str(data.get("status", "")).strip().lower()
+    if not status:
         errors.append("Состояние не может быть пустым")
+    elif status not in ALLOWED_STATUSES:
+        errors.append("Состояние должно быть: исправно / требует ремонта / списано")
+
+    # Дата (необязательное, но если ввели — проверяем)
+    date_received = str(data.get("date_received", "")).strip()
+    if date_received and not re.match(r'^\d{4}-\d{2}-\d{2}$', date_received):
+        errors.append("Дата должна быть в формате ГГГГ-ММ-ДД (например 2024-09-12)")
+
+    # Ответственный
+    responsible = str(data.get("responsible", "")).strip()
+    if responsible and len(responsible) < 2:
+        errors.append("Имя ответственного слишком короткое")
+
     return errors
 
 
@@ -53,9 +93,13 @@ def add_item(item: Dict) -> Tuple[bool, str]:
     if not str(item.get("inventory_number", "")).strip():
         item["inventory_number"] = generate_inventory_number()
 
+    # Нормализуем состояние
+    if item.get("status"):
+        item["status"] = item["status"].strip().lower()
+
     errors = validate_item(item)
     if errors:
-        return False, "Ошибки валидации: " + "; ".join(errors)
+        return False, "Ошибки валидации:\n- " + "\n- ".join(errors)
 
     if find_by_number(item["inventory_number"]):
         return False, f"Ошибка: инвентарный номер {item['inventory_number']} уже существует"
@@ -77,13 +121,19 @@ def search_by_cabinet(cabinet: str) -> List[Dict]:
 
 
 def filter_by_status(status: str) -> List[Dict]:
-    """Фильтрация оборудования по состоянию."""
     items = load_inventory()
     status_clean = status.strip().lower()
     return [item for item in items if str(item.get("status", "")).strip().lower() == status_clean]
 
 
 def update_item(inventory_number: str, updates: Dict) -> Tuple[bool, str]:
+    # Проверяем состояние, если его меняют
+    if "status" in updates:
+        status = updates["status"].strip().lower()
+        if status not in ALLOWED_STATUSES:
+            return False, "Состояние должно быть: исправно / требует ремонта / списано"
+        updates["status"] = status
+
     items = load_inventory()
     for i, item in enumerate(items):
         if item.get("inventory_number") == inventory_number:
@@ -130,16 +180,13 @@ def show_all_equipment() -> None:
 
 
 def get_statistics() -> Dict:
-    """Возвращает статистику по состояниям и кабинетам."""
     items = load_inventory()
-
     status_count = {}
     cabinet_count = {}
 
     for item in items:
         status = item.get("status", "не указано")
         cabinet = item.get("cabinet", "не указан")
-
         status_count[status] = status_count.get(status, 0) + 1
         cabinet_count[cabinet] = cabinet_count.get(cabinet, 0) + 1
 
@@ -151,7 +198,6 @@ def get_statistics() -> Dict:
 
 
 def show_statistics() -> None:
-    """Выводит статистику в удобном виде."""
     stats = get_statistics()
 
     print("\n" + "=" * 45)
