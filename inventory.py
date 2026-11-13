@@ -3,12 +3,10 @@ from storage import load_data, save_data
 
 
 def load_inventory() -> List[Dict]:
-    """Загружает список оборудования."""
     return load_data()
 
 
 def save_inventory(items: List[Dict]) -> bool:
-    """Сохраняет список оборудования."""
     return save_data(items)
 
 
@@ -76,6 +74,13 @@ def search_by_number(number: str) -> Optional[Dict]:
 def search_by_cabinet(cabinet: str) -> List[Dict]:
     items = load_inventory()
     return [item for item in items if item.get("cabinet") == cabinet.strip()]
+
+
+def filter_by_status(status: str) -> List[Dict]:
+    """Фильтрация оборудования по состоянию."""
+    items = load_inventory()
+    status_clean = status.strip().lower()
+    return [item for item in items if str(item.get("status", "")).strip().lower() == status_clean]
 
 
 def update_item(inventory_number: str, updates: Dict) -> Tuple[bool, str]:
