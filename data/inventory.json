@@ -30,10 +30,10 @@
     "inventory_number": "INV-004",
     "type": "ПК",
     "name": "Системный блок Lenovo ThinkCentre M70q",
-    "cabinet": "412",
+    "cabinet": "78",
     "status": "исправно",
     "date_received": "2025-02-18",
-    "responsible": "Сидоров М.К."
+    "responsible": "апр"
   },
   {
     "inventory_number": "INV-006",
