@@ -36,15 +36,6 @@
     "responsible": "Сидоров М.К."
   },
   {
-    "inventory_number": "INV-005",
-    "type": "Проектор",
-    "name": "Проектор Epson EB-X06",
-    "cabinet": "101",
-    "status": "списано",
-    "date_received": "2021-05-20",
-    "responsible": "Козлова Н.А."
-  },
-  {
     "inventory_number": "INV-006",
     "type": "Монитор",
     "name": "Монитор LG 27UL500",
